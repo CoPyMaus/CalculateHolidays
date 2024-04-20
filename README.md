@@ -88,7 +88,7 @@ holidayList = ch.GetFuturedHolidaysList(20);
 - GetDate()           - Ruft das Datum des Feiertages, Gedenktages oder Ereignis ab. Format: ``Montag, 01.01.2024``
 - GetNameOfHoliday()  - Name des Feier-, Gedenktages oder Ereigniss
 - GetHolidayType()    - Typ des Tages: `Gesetzlicher Feiertag`, `Regionaler Feiertag`, `Gedenktag`, `Ereigniss`, `Vorweihnachtstag` oder `Jahresende`.
-- GetRegions()        - Bundesländer die betroffen sind. Hauptsächlich bei Regionalen Feiertagen und Ereignisse.
+- GetRegions()        - Bundesländer die betroffen sind. Hauptsächlich bei Regionalen Feiertagen und Ereignisse. Wird als ArrayList übergeben. Jeder Eintrag enthält ein Bundesland.
 
 ## Beispiele:
 

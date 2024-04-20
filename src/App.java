@@ -13,6 +13,7 @@ public class App {
 
         // Beispiel für den Abruf von Weihnachten:
         HolidayEntry holiday = ch.GetChristmasEve();
+        System.out.println();
         System.out.println(holiday.GetDate() + "\t\t" + holiday.GetNameOfHoliday() + "\t\t" + holiday.GetHolidayType());
 
 
