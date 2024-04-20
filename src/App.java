@@ -4,7 +4,7 @@ public class App {
     public static void main(String[] args) {
 
         // Erzeugt ein Objekt zur Berechnung von Feiertagen für das Jahr 2024.
-        CalculateHolidays ch = new CalculateHolidays(2024);
+        CalculateHolidays ch = new CalculateHolidays(2024); 
 
         // Die Klasse HolidayEntry wird in CalculateHolidays verwendet, um eine ArrayList mit Elementen zu erstellen.
         // Jedes Element repräsentiert einen Feiertag und enthält verschiedene Eigenschaften wie Datum, Name und Typ.
