@@ -1,4 +1,4 @@
-# CalculateHolidays
+# CalculateHolidays - JAVA
 
 Die CalculateHolidays-Klasse ermöglicht die Berechnung der deutschen Feiertage, Gedenktage und Ereignisse. Bundesländer für regionale Feiertage sind ebenfalls mit berücksichtigt.
 
