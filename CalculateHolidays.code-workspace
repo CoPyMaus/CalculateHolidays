@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "CalculateHolidays",
+			"path": "CalculateHolidays"
+		}
+	],
+	"settings": {
+		"java.dependency.packagePresentation": "hierarchical",
+		"java.project.sourcePaths": [
+			"CalculateHolidays/src",
+		],
+		"java.project.referencedLibraries": [],
+		"java.project.outputPath": "bin/CalculateHolidays"
+	}
+}

@@ -1,3 +1,5 @@
+package CalculateHolidays;
+
 /*-----------------------------------------------------------------+
 | Class:       CalculateHolidays
 | Copyright:   (C) Jörg-Andre Kurth
