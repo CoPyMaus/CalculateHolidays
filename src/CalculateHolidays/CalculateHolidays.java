@@ -36,6 +36,85 @@ public class CalculateHolidays {
 
     private int currentYear;
     private String dateOfEaster;
+    private String regionsfilter = null;
+    private List<String> holidayTypeFilter = new ArrayList<>();
+
+    // Setter
+
+    /**
+     * Sets the region (state) as a filter.
+     * It is possible to enter an appropriate abbreviation or the full name of the region.
+     * Two-letter-region is case-insensitive
+     * 
+     * <p> BW = Baden-Württemberg
+     * <p> BY = Bayern
+     * <p> BE = Berlin
+     * <p> BB = Brandenburg
+     * <p> HB = Bremen
+     * <p> HH = Hamburg
+     * <p> HE = Hessen
+     * <p> MV = Mecklenburg-Vorpommern
+     * <p> NI = Niedersachsen
+     * <p> NW = Nordrhein-Westfalen
+     * <p> RP = Rheinland-Pfalz
+     * <p> SL = Saarland
+     * <p> SN = Sachsen
+     * <p> ST = Sachsen-Anhalt
+     * <p> SH = Schleswig-Holstein
+     * <p> TH = Thüringen
+     * 
+     * @param region
+     * @return Returns true if the region has been deposited. Otherwise false.
+     */
+    public boolean SetRegionFilter(String region) {
+        if (region != null && region.length() == 2) {
+            this.regionsfilter = this.GetFederalState(region.toUpperCase());
+            return true;
+        }
+        else if (region != null && region.length() > 2) {
+            this.regionsfilter = region;
+            return true;
+        }
+        else if (region != null) {
+            this.regionsfilter = null;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Add the type of holiday
+     * It is possible to pass multiple types as List<Integer>.
+     * 
+     * <p> 0 = National holiday
+     * <p> 1 = Regional holiday (state can be defined with SetRegionFilter)
+     * <p> 2 = Remembrance Day
+     * <p> 3 = Event
+     * <p> 4 = Pre-Christmas day
+     * <p> 5 = end of year
+     * 
+     * @param type
+     * 
+     */
+    public void AddHolidayTypeFilter(int type) {
+        if (type > -1 && !this.holidayTypeFilter.contains(GetHolidayType(type))) {
+            this.holidayTypeFilter.add(GetHolidayType(type));
+        }
+    }
+    public void AddHolidayTypeFilter(List<Integer> type) {
+        for (int value : type) {
+            if (value > -1 && !this.holidayTypeFilter.contains(GetHolidayType(value))) {
+                this.holidayTypeFilter.add(GetHolidayType(value));
+            }
+        }
+    }
+    /**
+     * Resets the filter for the holidays
+     */
+    public void ResetHolidayTypeFilter() {
+        this.holidayTypeFilter = new ArrayList<>();
+    }
+
 
     // Constructor
     public CalculateHolidays(int year) {
@@ -68,9 +147,9 @@ public class CalculateHolidays {
     public HolidayEntry GetHolyThreeKings() {
         String sdate = LocalDate.of(this.currentYear, 1, 6).toString();
         List<String> regions = new ArrayList<>();
-        regions.add("Baden-Württemberg");
-        regions.add("Bayern");
-        regions.add("Sachsen-Anhalt");
+        regions.add(GetFederalState("BW"));
+        regions.add(GetFederalState("BY"));
+        regions.add(GetFederalState("ST"));
         HolidayEntry holidayEntry = new HolidayEntry(sdate, ConvertDateToGermanFormat(sdate), "Heilige drei Könige", this.GetHolidayType(1), regions);
         return holidayEntry;
     }
@@ -102,8 +181,8 @@ public class CalculateHolidays {
     public HolidayEntry GetInternationalWomensDay() {
         String sdate = LocalDate.of(this.currentYear, 3, 8).toString();
         List<String> regions = new ArrayList<>();
-        regions.add("Berlin");
-        regions.add("Mecklenburg-Vorpommern");
+        regions.add(GetFederalState("BE"));
+        regions.add(GetFederalState("MV"));
         HolidayEntry holidayEntry = new HolidayEntry(sdate, ConvertDateToGermanFormat(sdate), "Internationaler Frauentag", this.GetHolidayType(1), regions);
         return holidayEntry;
     }
@@ -160,11 +239,11 @@ public class CalculateHolidays {
     public HolidayEntry GetAnniversaryOfTheLiberationFromNationalSocialism() {
         String sdate = LocalDate.of(this.currentYear, 5, 8).toString();
         List<String> regions = new ArrayList<>();
-        regions.add("Berlin");
-        regions.add("Brandenburg");
-        regions.add("Bremen");
-        regions.add("Mecklenburg-Vorpommern");
-        regions.add("Thüringen");
+        regions.add(GetFederalState("BE"));
+        regions.add(GetFederalState("BB"));
+        regions.add(GetFederalState("HB"));
+        regions.add(GetFederalState("MV"));
+        regions.add(GetFederalState("TH"));
         HolidayEntry holidayEntry = new HolidayEntry(sdate, ConvertDateToGermanFormat(sdate), "Jahrestag der Befreiung vom Nationalsozialismus", this.GetHolidayType(2), regions);
         return holidayEntry;
     }
@@ -198,12 +277,12 @@ public class CalculateHolidays {
     public HolidayEntry GetCorpusChristi() {
         String sdate = LocalDate.parse(this.dateOfEaster).plusDays(60).toString();
         List<String> regions = new ArrayList<>();
-        regions.add("Baden-Württemberg");
-        regions.add("Bayern");
-        regions.add("Hessen");
-        regions.add("Nordrhein-Westfalen");
-        regions.add("Rheinland-Pfalz");
-        regions.add("Saarland");
+        regions.add(GetFederalState("BW"));
+        regions.add(GetFederalState("BY"));
+        regions.add(GetFederalState("HE"));
+        regions.add(GetFederalState("NW"));
+        regions.add(GetFederalState("RP"));
+        regions.add(GetFederalState("SL"));
         HolidayEntry holidayEntry = new HolidayEntry(sdate, ConvertDateToGermanFormat(sdate), "Fronleichnam", this.GetHolidayType(1), regions);
         return holidayEntry;
     }
@@ -211,7 +290,7 @@ public class CalculateHolidays {
     public HolidayEntry GetHighPeaceFestival() {
         String sdate = LocalDate.of(this.currentYear, 8, 8).toString();
         List<String> regions = new ArrayList<>();
-        regions.add("Baden-Württemberg");
+        regions.add(GetFederalState("BW"));
         HolidayEntry holidayEntry = new HolidayEntry(sdate, ConvertDateToGermanFormat(sdate), "Hohes Friedensfest", this.GetHolidayType(1), regions);
         return holidayEntry;
     }
@@ -219,8 +298,8 @@ public class CalculateHolidays {
     public HolidayEntry GetAssumptionDay() {
         String sdate = LocalDate.of(this.currentYear, 8, 15).toString();
         List<String> regions = new ArrayList<>();
-        regions.add("Bayern");
-        regions.add("Saarland");
+        regions.add(GetFederalState("BY"));
+        regions.add(GetFederalState("SL"));
         HolidayEntry holidayEntry = new HolidayEntry(sdate, ConvertDateToGermanFormat(sdate), "Maria Himmelfahrt", this.GetHolidayType(1), regions);
         return holidayEntry;
     }
@@ -228,7 +307,7 @@ public class CalculateHolidays {
     public HolidayEntry GetWorldChildrensDay() {
         String sdate = LocalDate.of(this.currentYear, 9, 20).toString();
         List<String> regions = new ArrayList<>();
-        regions.add("Thüringen");
+        regions.add(GetFederalState("TH"));
         HolidayEntry holidayEntry = new HolidayEntry(sdate, ConvertDateToGermanFormat(sdate), "Weltkindertag", this.GetHolidayType(1), regions);
         return holidayEntry;
     }
@@ -249,15 +328,15 @@ public class CalculateHolidays {
     public HolidayEntry GetReformationDay() {
         String sdate = LocalDate.of(this.currentYear, 10, 31).toString();
         List<String> regions = new ArrayList<>();
-        regions.add("Brandenburg");
-        regions.add("Bremen");
-        regions.add("Hamburg");
-        regions.add("Mecklenburg-Vorpommern");
-        regions.add("Niedersachsen");
-        regions.add("Sachsen");
-        regions.add("Sachsen-Anhalt");
-        regions.add("Schleswig-Holstein");
-        regions.add("Thüringen");
+        regions.add(GetFederalState("BB"));
+        regions.add(GetFederalState("HB"));
+        regions.add(GetFederalState("HH"));
+        regions.add(GetFederalState("MV"));
+        regions.add(GetFederalState("NI"));
+        regions.add(GetFederalState("SN"));
+        regions.add(GetFederalState("ST"));
+        regions.add(GetFederalState("SH"));
+        regions.add(GetFederalState("TH"));
         HolidayEntry holidayEntry = new HolidayEntry(sdate, ConvertDateToGermanFormat(sdate), "Reformationstag", this.GetHolidayType(1), regions);
         return holidayEntry;
     }
@@ -271,11 +350,11 @@ public class CalculateHolidays {
     public HolidayEntry GetAllSaintsDay() {
         String sdate = LocalDate.of(this.currentYear, 11, 1).toString();
         List<String> regions = new ArrayList<>();
-        regions.add("Baden-Württemberg");
-        regions.add("Bayern");
-        regions.add("Nordrhein-Westfalen");
-        regions.add("Rheinland-Pfalz");
-        regions.add("Saarland");
+        regions.add(GetFederalState("BW"));
+        regions.add(GetFederalState("BY"));
+        regions.add(GetFederalState("NW"));
+        regions.add(GetFederalState("RP"));
+        regions.add(GetFederalState("SL"));
         HolidayEntry holidayEntry = new HolidayEntry(sdate, ConvertDateToGermanFormat(sdate), "Allerheiligen", this.GetHolidayType(1), regions);
         return holidayEntry;
     }
@@ -302,7 +381,7 @@ public class CalculateHolidays {
             sdate = ld.with(TemporalAdjusters.previous(DayOfWeek.WEDNESDAY)).toString();
         }
         List<String> regions = new ArrayList<>();
-        regions.add("Sachsen");
+        regions.add(GetFederalState("SN"));
         HolidayEntry holidayEntry = new HolidayEntry(sdate, ConvertDateToGermanFormat(sdate), "Buß- und Bettag", this.GetHolidayType(1), regions);
         return holidayEntry;
     }
@@ -429,6 +508,23 @@ public class CalculateHolidays {
             }
         });
 
+        if (this.holidayTypeFilter.size() > 0 || (this.regionsfilter != null && !this.regionsfilter.isEmpty())) {
+            // holidayTypeFilter
+            for (int i=holidayList.size() - 1; i >= 0; i--) {
+                if (this.holidayTypeFilter.size() > 0) {
+                    if (!this.holidayTypeFilter.contains(holidayList.get(i).GetHolidayType())) {
+                        holidayList.remove(i);
+                        continue;
+                    }
+                }
+                if (this.regionsfilter != null && !this.regionsfilter.isEmpty() && holidayList.get(i).GetRegions().size() > 0) {
+                    if (!holidayList.get(i).GetRegions().contains(this.regionsfilter)) {
+                        holidayList.remove(i);
+                    }
+                }
+            }
+        }
+
         return holidayList;
 
     }
@@ -505,6 +601,45 @@ public class CalculateHolidays {
                 return "Vorweihnachtstag";
             case 5:
                 return "Jahresende";
+            default:
+                return null;
+        }
+    }
+
+    private String GetFederalState(String fs) {
+        switch (fs) {
+            case "BW":
+                return "Baden-Württemberg";
+            case "BY":
+                return "Bayern";
+            case "BE":
+                return "Berlin";
+            case "BB":
+                return "Brandenburg";
+            case "HB":
+                return "Bremen";
+            case "HH":
+                return "Hamburg";
+            case "HE":
+                return "Hessen";
+            case "MV":
+                return "Mecklenburg-Vorpommern";
+            case "NI":
+                return "Niedersachsen";
+            case "NW":
+                return "Nordrhein-Westfalen";
+            case "RP":
+                return "Rheinland-Pfalz";
+            case "SL":
+                return "Saarland";
+            case "SN":
+                return "Sachsen";
+            case "ST":
+                return "Sachsen-Anhalt";
+            case "SH":
+                return "Schleswig-Holstein";
+            case "TH":
+                return "Thüringen";
             default:
                 return null;
         }
